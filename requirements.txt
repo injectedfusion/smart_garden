@@ -1,0 +1,7 @@
+Adafruit_GPIO
+Adafruit_MCP3008
+elasticsearch
+numpy
+requests
+netifaces
+prettyprinter
