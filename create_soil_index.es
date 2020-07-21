@@ -19,8 +19,6 @@ PUT /soil_index
             "channel 0 Sample": { "type" : "long" },
             "channel 1 Moisture Percentage" : { "type" : "long" },
             "channel 1 Sample": { "type" : "long" },
-            "internal IP": { "type" : "ip" },
-            "external IP": { "type" : "ip" },
             "timestamp": { "type" : "date" }
         }
     }
