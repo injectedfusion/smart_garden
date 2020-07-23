@@ -34,13 +34,16 @@ mcp = Adafruit_MCP3008.MCP3008(spi=SPI.SpiDev(SPI_PORT, SPI_DEVICE))
 
 def main():
     # Build Elasticsearch client
-    es = Elasticsearch('IPADDRESS:9200') # IP ADDRESS or Elasticsearch Target URL goes here.
+    es = Elasticsearch(
+            "IPADDRESS:PORT",
+            http_auth=("username","password")
+    )
     # Get Internal
     #  IP Address and save it as the variable 'hip'
-    ni.ifaddresses('wlan0')
-    hip = ni.ifaddresses('wlan0')[ni.AF_INET][0]['addr']
+    # ni.ifaddresses('wlan0')
+    # hip = ni.ifaddresses('wlan0')[ni.AF_INET][0]['addr']
     # Get External IP address and save it as the variable 'exip'
-    exip = requests.get('http://icanhazip.com/')
+    # exip = requests.get('http://icanhazip.com/')
     # Get the Hostname of this Raspberry Pi
     hname = socket.gethostname()
 
@@ -62,8 +65,6 @@ def main():
 
     doc = {
         'hostname' : hname,
-        'internal IP' :hip,
-        'external IP' : str(exip.text).strip(),
         'channel 0 Sample' : channel0_sample,
         'channel 0 Moisture Percentage' : channel0_percent,
         'channel 1 Sample' : channel1_sample,
@@ -76,6 +77,17 @@ def main():
 
     res = es.get(index="soil-index", id=random_id)
     print(res['_source'])
+
+    # es.indices.refresh(index="soil-index")
+
+    # res = es.search(index="soil-index", body={"query": {"match_all": {}}})
+    # print("Got %d Hits:" % res['hits']['total']['value'])
+    # for hit in res['hits']['hits']:
+    #     print("%(timestamp)s %(hostname)s: %(channel 0 Moisture Percentage)s" % hit["_source"])
+
+    # pause for 600 seconds (10 minutes) 
+    # time.sleep(600)
+
 
 if __name__ == "__main__":
     main()
